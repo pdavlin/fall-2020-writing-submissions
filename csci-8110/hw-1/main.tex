@@ -1,0 +1,60 @@
+% BEGIN TEMPLATE
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref} 
+\usepackage{xcolor}
+\usepackage{nameref}
+\graphicspath{ {../../images/} }
+\bibliographystyle{acm}
+% CHANGE THESE
+\newcommand{\courseListing}{CSCI 8110-001}
+\newcommand{\courseName}{Advanced Machine Learning Applications}
+\newcommand{\assignmentTitle}{Homework Assignment \#1}
+\newcommand{\assignmentSubtitle}{Convolutional Autoencoders}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+\urlstyle{same}
+
+\begin{document}
+  \input{../../templates/titlepage.tex}
+  \graphicspath{{./images/}}
+% END TEMPLATE
+\section{Introduction}
+
+\section{Project Setup}
+\par All work in this project was developed and executed using the Paperspace Gradient service.
+Gradient allows for rapid setup of TensorFlow notebooks on GPU-powered machines, which was ideal for this first project given that optimizing a personal computer for running machine learning models proved difficult at the outset.
+The downside, however, is that without a more expensive subscription, Gradient only allows for six hours' worth of compute time at once (further discussed in \nameref{procresults}).
+This limits the amount of time that computations can run, and Gradient is strict about cutting off at that point--more than one computation for this project was cut off due to poor calculation of the time a task would take to complete.
+
+\par Once the Gradient instance is up and running, the instance is a reasonably straightforward Jupyter Notebook running TensorFlow 2.0.
+Blocks of code can be executed interactively and accessed over the web.
+A static version of the notebook can be accessed by clicking on \href{https://console.paperspace.com/te7vzjiu3/notebook/prz0iko1d}{this link}.
+
+\section{Process \& Results} \label{procresults}
+\par This first assignment proved difficult for two reasons. 
+First, with minimal experience in setting up Jupyter notebooks or working with TensorFlow, it was challenging to set up and successfully run code out of the gate in the Paperspace instance.
+Some time was spent off the bat learning about some of the conventions of working with Jupyter notebook files to ensure that proper processes were being followed.
+
+\par The second, more project-specific, issue was that adapting the code from class to accept an input size appropriate to the CIFAR-10 dataset was not immediately intuitive.
+This was a byproduct of inexperience with TensorFlow and, initially, a lack of understanding of how 
+
+\section{Conclusions}
+\newpage
+\section{Appendices}
+\subsection{Complete Code Listing}
+
+\begin{thebibliography}{9}
+  \bibitem{GoAiWired} 
+  Cade Metz. 2017.
+  \textit{The Sadness and Beauty of Watching Google's AI Play Go}. 
+  Retrieved August 27, 2020 from \url{https://www.wired.com/2016/03/sadness-beauty-watching-googles-ai-play-go/}.
+  
+  \end{thebibliography}
+
+\end{document}
