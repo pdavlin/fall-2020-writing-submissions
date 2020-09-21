@@ -4,6 +4,7 @@
 \usepackage{hyperref} 
 \usepackage{xcolor}
 \usepackage{nameref}
+\usepackage{listings}
 \graphicspath{ {../../images/} }
 \bibliographystyle{acm}
 % CHANGE THESE
@@ -19,6 +20,28 @@
     urlcolor={blue!80!black}
 }
 \urlstyle{same}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\lstdefinestyle{mystyle}{
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
 
 \begin{document}
   \input{../../templates/titlepage.tex}
@@ -48,6 +71,8 @@ This was a byproduct of inexperience with TensorFlow and, initially, a lack of u
 \newpage
 \section{Appendices}
 \subsection{Complete Code Listing}
+
+\lstinputlisting[language=Python]{HW1_code.py}
 
 \begin{thebibliography}{9}
   \bibitem{GoAiWired} 
