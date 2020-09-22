@@ -1,11 +1,12 @@
 % BEGIN TEMPLATE
 \documentclass{article}
 \usepackage{graphicx}
-<<<<<<< HEAD
 \usepackage{hyperref} 
 \usepackage{xcolor}
 \usepackage{nameref}
 \usepackage{listings}
+\usepackage{float}
+\usepackage[title]{appendix}
 \graphicspath{ {../../images/} }
 \bibliographystyle{acm}
 % CHANGE THESE
@@ -61,19 +62,87 @@ Blocks of code can be executed interactively and accessed over the web.
 A static version of the notebook can be accessed by clicking on \href{https://console.paperspace.com/te7vzjiu3/notebook/prz0iko1d}{this link}.
 
 \section{Process \& Results} \label{procresults}
-\par This first assignment proved difficult for two reasons. 
-First, with minimal experience in setting up Jupyter notebooks or working with TensorFlow, it was challenging to set up and successfully run code out of the gate in the Paperspace instance.
-Some time was spent off the bat learning about some of the conventions of working with Jupyter notebook files to ensure that proper processes were being followed.
+\par Procedurally, this assignment had a very straightforward premise: implement a convolutional autoencoder, with a reuse of the structure outlined in lecture allowed.
+
+\par Initially, the given task proved difficult for two reasons. 
+First, with minimal experience in setting up Jupyter notebooks or working with TensorFlow/Keras, it was challenging to set up and successfully run code out of the gate in the Paperspace instance.
+Some time needed to be spent learning about some of the conventions of working with Jupyter notebook files to ensure that proper conventions were being followed.
 
 \par The second, more project-specific, issue was that adapting the code from class to accept an input size appropriate to the CIFAR-10 dataset was not immediately intuitive.
-This was a byproduct of inexperience with TensorFlow and, initially, a lack of understanding of how 
+Partly because of the three color channels in the data (as opposed to one) and the size of the kernels used (3x3), the expected input was initially set to a shape of (28,28,1), where the image inputs were each of the shape (32,32,3).
+This was a byproduct of inexperience with TensorFlow and, initially, a lack of understanding of how the shape of an input changes as the result of convolution steps. 
+The remedy was relatively simple, though: on each step where \lstinline[language=Python]{Conv2D()} was used, it was important to add the \lstinline[language=Python]{padding='same'} parameter so that the extra pixels at the end of each image weren't omitted.
+
+\par Having solved these issues, the intent and process of the assignment became more clear.
+Code provided in the lecure materials had several pre-defined convolutional layers that were re-implemented as shown below:
+\begin{lstlisting}[language=Python]
+x = Conv2D(16, (3, 3), 
+    activation='relu', padding='same')(input_img)
+x = MaxPooling2D((2, 2), padding='same')(x)
+x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+x = MaxPooling2D((2, 2), padding='same')(x)
+x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+encoded = MaxPooling2D((2, 2), padding='same')(x)
+
+x = Conv2D(8, (3, 3), activation='relu', padding='same')(encoded)
+x = UpSampling2D((2, 2))(x)
+x = Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+x = UpSampling2D((2, 2))(x)
+x = Conv2D(16, (3, 3), activation='relu', padding='same')(x)
+x = UpSampling2D((2, 2))(x)
+decoded = 
+    Conv2D(3, (3, 3), activation='sigmoid', padding='same')(x)
+\end{lstlisting}
+
+\par The Keras model was then fit against the test Cifar10 data as follows:
+
+\begin{lstlisting}[language=Python]
+autoencoder.fit(x_train, x_train, 
+                epochs=50,
+                batch_size=256,
+                shuffle=True,
+                validation_data=(x_test, x_test))
+
+\end{lstlisting}
+
+\par Using this model, each input image was first encoded and then decoded through the convolution and max pooling layers.
+The input and output images can be compared in \autoref{fig:initial}:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5in]{csci-8110/hw-1/hw1-images/16-8-8-50.png}
+    \caption{CAE with layer values 16/8/8, with 50 training epochs}
+    \label{fig:initial}
+\end{figure}
+
+\par \autoref{fig:initial} represents a good start, given that the model can clearly output a decoded set of images, but the outcome is not a visually clear result. 
+Fortunately, it was clear at this point that there are three "knobs" that can be adjusted in order to further enhance the autoencoder's output:
+\begin{enumerate}
+  \item \textit{The number of filters in each layer}, the number in the first argument of the \lstinline[language=Python]{Conv2D()} function, to increase the resolution  of processing at each layer;
+  \item \textit{The number of epochs}, to increase the size of the training set for the model; and
+  \item \textit{The number of layers}, or adding more calls of \lstinline[language=Python]{Conv2D()} and \lstinline[language=Python]{MaxPooling2D()} in the decoding or encoding steps.
+\end{enumerate}
+
+\par For this report, the first two options were explored. 
+The general strategy when adjusting each of these three parameters was fairly straightforward--making the numbers bigger makes the resulting image set clearer.
+There are several outputs from various parameters included in Appendix \ref{modelouts}, but the most relevant of them is the result from what might be considered the "best" setup encountered while working on the assignment.
+
+\par The best model used is reflected by the code implementation in Appendix \ref{codelist}. A combination of more filters per layer and a higher number of epochs was used to create a fairly clear result set, shown below:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5in]{csci-8110/hw-1/hw1-images/64-128-256-500.png}
+    \caption{CAE with layer values 64/128/256, with 500 training epochs}
+    \label{fig:final}
+\end{figure}
 
 \section{Conclusions}
 \newpage
-\section{Appendices}
-\subsection{Complete Code Listing}
-
+\begin{appendices}
+\section{Complete Code Listing} \label{codelist}
 \lstinputlisting[language=Python]{HW1_code.py}
+\newpage
+\section{Model Output Listing} \label{modelouts}
+\end{appendices}
 
 \begin{thebibliography}{9}
   \bibitem{GoAiWired} 
@@ -83,28 +152,4 @@ This was a byproduct of inexperience with TensorFlow and, initially, a lack of u
   
   \end{thebibliography}
 
-=======
-\graphicspath{ {../../images/} }
-% CHANGE THESE
-\newcommand{\courseListing}{CSCI 8110-001}
-\newcommand{\courseName}{Advanced Machine Learning Applications}
-\newcommand{\assignmentTitle}{Assignment \#1}
-\newcommand{\assignmentSubtitle}{Convolutional Autoencoders}
-
-\begin{document}
-  \input{../../templates/titlepage.tex}
-  \graphicspath{{./hw1-images/}}
-% END TEMPLATE
-\section{Introduction}
-\textit{[placeholder]}
-\section{Project Setup}
-All work for this assignment was developed and executed using the Paperspace Gradient online service.
-Gradient allows for rapid setup of TensorFlow environments on GPU-powered machines, which was ideal for this first project given that optimizing a personal computer for running machine learning models proved to be difficult for a first attempt at executing the concepts covered in lecture. The downside, however, is that 
-\\[0.5in]
-\textbf{TODO}: add citation formatting
-\\
-(1) needs to be https://www.wired.com/2016/03/sadness-beauty-watching-googles-ai-play-go/
-\\
-(2) needs to be https://towardsdatascience.com/the-truth-behind-facebook-ai-inventing-a-new-language-37c5d680e5a7
->>>>>>> 3ef1ff21c6404548dc895cc789427cebe01e3333
 \end{document}
