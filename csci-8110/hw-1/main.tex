@@ -49,7 +49,6 @@
   \input{../../templates/titlepage.tex}
   \graphicspath{{./images/}}
 % END TEMPLATE
-\section{Introduction}
 
 \section{Project Setup}
 \par All work in this project was developed and executed using the Paperspace Gradient service.
@@ -110,7 +109,7 @@ The input and output images can be compared in \autoref{fig:initial}:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=5in]{csci-8110/hw-1/hw1-images/16-8-8-50.png}
+    \includegraphics[width=4.75in]{csci-8110/hw-1/hw1-images/16-8-8-50.png}
     \caption{CAE with layer values 16/8/8, with 50 training epochs}
     \label{fig:initial}
 \end{figure}
@@ -125,30 +124,74 @@ Fortunately, it was clear at this point that there are three "knobs" that can be
 
 \par For this report, the first two options were explored. 
 The general strategy when adjusting each of these three parameters was fairly straightforward--making the numbers bigger makes the resulting image set clearer.
-There are several outputs from various parameters included in Appendix \ref{modelouts}, but the most relevant of them is the result from what might be considered the "best" setup encountered while working on the assignment.
+It was important to consider the intersection between the complexity of the model and the number of training epochs run.
+The instructor-provided model ran each epoch in about 2 seconds, but other versions of the model took seven seconds or more. On the upper end, the most complex model took 40 seconds per epoch, so care had to be taken so that models would be able to run before the Paperspace Gradient's cutoff.
+There is also a point where adding additional epochs does not improve the output of the model--for one run, the layers used were all set to 32 and the model was run 5,000 times, but the resulting output was not meaningfully clearer than runs of the same model at 500 or 1,000 times.
 
-\par The best model used is reflected by the code implementation in Appendix \ref{codelist}. A combination of more filters per layer and a higher number of epochs was used to create a fairly clear result set, shown below:
+\par Another consideration is that the order in which numbers of filters is applied is, evidently, conventionally an increasing format while encoding the inputs \cite{KerasLayers}.
+Moreover, for the decoding phase, the order should mirror the encoding phase, so if the filters for each layer are, in order, 8, 16, and 32, then the order of layers in the decoding phase should be 32, 16, and 8.
+
+\par There are several outputs from various parameters included in Appendix \ref{modelouts}, but the most relevant of them is the result from what might be considered the "best" setup encountered while working on the assignment.
+That model is reflected by the code implementation in Appendix \ref{codelist}. A combination of more filters per layer and a higher number of epochs was used to create a fairly clear result set, shown below:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=5in]{csci-8110/hw-1/hw1-images/64-128-256-500.png}
+    \includegraphics[width=4.75in]{csci-8110/hw-1/hw1-images/64-128-256-500.png}
     \caption{CAE with layer values 64/128/256, with 500 training epochs}
     \label{fig:final}
 \end{figure}
+\par Of particular note are the fourth image, where the red lines are much more similar than the original image, and the last one, where the rear tire of the truck are most visible.
+
+\par This final model took around an hour to run (7 seconds per epoch $\times$ 500 epochs) and proved to be a fairly reliable middle point between number of epochs and number of filters in layers. 
 
 \section{Conclusions}
+As a simple introduction to TensorFlow and Keras, this homework assignment was very informative.
+More was learned about implementing and tuning convolutional autoencoders (CAEs) and, generally, some more comfort was developed with using interactive notebooks and TensorFlow commands.
+Fortunately, tuning these models was fairly straightforward--so this comfort under the belt is a strong foundation upon which more experience can be built throughout the remainder of the course.
+
 \newpage
 \begin{appendices}
+
+
+\section{Model Output Listing} \label{modelouts}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4.75in]{csci-8110/hw-1/hw1-images/8-8-16-50.png}
+    \caption{CAE with layer values 8/8/16, with 50 training epochs}
+    \label{fig:final}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4.75in]{csci-8110/hw-1/hw1-images/8-8-16-250.png}
+    \caption{CAE with layer values 8/8/16, with 250 training epochs}
+    \label{fig:final}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4.75in]{csci-8110/hw-1/hw1-images/8-8-16-1000.png}
+    \caption{CAE with layer values 8/8/16, with 1000 training epochs}
+    \label{fig:final}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4.75in]{csci-8110/hw-1/hw1-images/8-8-16-5000.png}
+    \caption{CAE with layer values 8/8/16, with 5000 training epochs}
+    \label{fig:final}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4.75in]{csci-8110/hw-1/hw1-images/256-512-1024-50.png}
+    \caption{CAE with layer values 256/512/1024, with 50 training epochs}
+    \label{fig:final}
+\end{figure}
+
+\newpage
 \section{Complete Code Listing} \label{codelist}
 \lstinputlisting[language=Python]{HW1_code.py}
-\newpage
-\section{Model Output Listing} \label{modelouts}
 \end{appendices}
 
 \begin{thebibliography}{9}
-  \bibitem{GoAiWired} 
-  Cade Metz. 2017.
-  \textit{The Sadness and Beauty of Watching Google's AI Play Go}. 
-  Retrieved August 27, 2020 from \url{https://www.wired.com/2016/03/sadness-beauty-watching-googles-ai-play-go/}.
+  \bibitem{KerasLayers} 
+  Adrian Rosebrock. 2018. Keras Conv2D and Convolutional Layers. (December 2018). Retrieved September 21, 2020 from https://www.pyimagesearch.com/2018/12/31/keras-conv2d-and-convolutional-layers/.
   
   \end{thebibliography}
 
