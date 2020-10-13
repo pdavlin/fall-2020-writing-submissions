@@ -1,0 +1,37 @@
+% BEGIN TEMPLATE
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref} 
+\usepackage{xcolor}
+\graphicspath{ {../../images/} }
+\bibliographystyle{acm}
+% CHANGE THESE
+\newcommand{\courseListing}{CSCI 8456-001}
+\newcommand{\courseName}{Introduction to Artificial Intelligence}
+\newcommand{\assignmentTitle}{The Winograd Schema Challenge}
+\newcommand{\assignmentSubtitle}{Reading on AI \#2}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+\urlstyle{same}
+
+\begin{document}
+  \input{../../templates/titlepage.tex}
+  \graphicspath{{./images/}}
+% END TEMPLATE
+\par One interesting idea gleaned from this paper is the idea of setting acceptable testing and evaluation parameters, around which a better definition of intelligence can be formed.
+The authors of this paper posit that the Turing Test, generally regarded as the aspirational standard for assessing machine intelligence, is not complete.
+Their rationale is that the idea of "conversational" machines is not easily quantifiable--humans are either too lenient in defining what is or is not a "conversation," or machines are able to "cheat" by using canned, context-independent responses in a way that evades meaningful assessment.
+Their test, the Winograd Schema challenge, is a solution to this in that it provides short, context aware challenges that have to be logically solved by a system being assessed.
+
+\par Like the previous paper, authored by John McCarthy, this paper continues to challenge my assumptions about the idea of "intelligent" machines not by \textit{building} an intelligent machine but by asking me to evaluate how, if at all, I might consider a machine to be intelligent.
+If we aren't able to identify the reasons why systems display intelligence, or if we can't establish repeatable, measurable results in AI testing, we aren't really performing computer \textit{science}.
+From an academic perspective, keeping this in mind will be extremely useful because it forms the basis upon which new ideas can be built.
+Even in industry, though, well-defined problems and applications are useful because they prevent software engineers from wasting resources in order to chase nebulous results.
+
+\end{document}Even in industry, though, well-defined problems and applications are useful because they prevent software engineers from wasting resources in order to chase nebulous results.
+
