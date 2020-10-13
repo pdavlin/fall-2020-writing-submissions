@@ -53,19 +53,44 @@
 \section{Project Setup}
 \par Similar to the prior assignment, all work in this project was developed and executed using the Paperspace Gradient service.
 Gradient allows for rapid setup of TensorFlow notebooks on GPU-powered machines.
+\par Moreover, per the provided instructions, the Keras Vis library was used to simplify the process of implementing the concepts discussed in class.
+There are many effective libraries built on top of the Keras toolset for this kind of application, allowing for very direct implementation and understanding of the processes used to visualize model outputs.
+Several of the key features of this library will be discussed in the \nameref{impl} section.
 
+\section{Process \& Results}
+\subsection{Method Selection}
+In approaching this project, the first step was to try and gain more familiarity on the concepts of saliency mapping and class activation maps (CAMs).
+There is a good deal of academic literature around both approaches available on the internet for comparison.
+Ultimately, the decision of which to implement for this project (only one being required) was arbitrary; the CAM approach was chosen primarily because of the more vibrant colors of its output in documentation online.
+While not a terrifically academic method by which to select a project, it was ultimately somewhat of a coin flip to decide what to implement.
+
+\par asdf \cite{Selvaraju2020}
+
+\subsection{Implementation} \label{impl}
+
+\section{Conclusions}
+One of the interesting traits of the CAM methods used in this project is that the effectiveness of methods is predicated heavily on a well-trained model.
+In practice, this meant that stock images of, say, a goldfish were easily recognizable by the model, where personal photos of a cat were misinterpreted.
+Since the results of CAM mapping are tied so closely to that model, and since the process of training models currently feels somewhat out of view, it bears noting that an area of interest for future work might be around training and implementing more training for datasets. It was difficult to resist the urge to try and implement a more robust model for, say, a family member's pet. 
+The possibility of doing that kind of work later in this course (or in future academic work) is attractive in that it would provide further opportunities to build an understanding of how neural networks can be supplied with better information on which to make inferences about data.
+
+\par As it stands, though, this project was useful in terms of helping to develop a better understanding of how CNNs can be applied to explain the criteria upon which a trained model perceives input data to be one category (over another).
+Being able to use provided Keras tools to implement this made for a somewhat easy assignment; this was so much the case that it felt somewhat uncomfortable writing only a few lines of code for submission.
+The foundation provided by Assignment \#1 and this assignment should be adequate to move on to more complex topics like training models to data or doing more robust image recognition.
 
 \begin{appendices}
 
-% \newpage
-% \section{Complete Code Listing} \label{codelist}
-% \lstinputlisting[language=Python]{HW1_code.py}
+\newpage
+\section{Model Output Listing} \label{modelouts}
+TODO
+\newpage
+\section{Complete Code Listing} \label{codelist}
+\lstinputlisting[language=Python]{HW2_code.py}
 \end{appendices}
 
-\begin{thebibliography}{9}
-  \bibitem{KerasLayers} 
-  Adrian Rosebrock. 2018. Keras Conv2D and Convolutional Layers. (December 2018). Retrieved September 21, 2020 from https://www.pyimagesearch.com/2018/12/31/keras-conv2d-and-convolutional-layers/.
+
+  \bibliography{references}
   
-  \end{thebibliography}
+
 
 \end{document}
