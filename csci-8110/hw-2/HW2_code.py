@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[129]:
+# In[1]:
 
 
 import time
@@ -16,7 +16,7 @@ from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.applications.imagenet_utils import decode_predictions
 
 
-# In[130]:
+# In[2]:
 
 
 model = VGG16(
@@ -29,13 +29,7 @@ model = VGG16(
 )
 
 
-# In[131]:
-
-
-# model.summary()
-
-
-# In[132]:
+# In[3]:
 
 
 cat_file = open("imagenet1000_clsidx_to_labels.txt", "r")
@@ -46,7 +40,7 @@ cat_file.close()
 print(len(cat_dict))
 
 
-# In[133]:
+# In[4]:
 
 
 def find_cat_in_dict(prediction_name):
@@ -55,49 +49,49 @@ def find_cat_in_dict(prediction_name):
             return cat_num
 
 
-# In[144]:
+# In[5]:
 
 
-# Image titles
-# image_titles = ['Goldfish', "Beer", 'Axolotl']
+# the tf-keras-vis library only takes an array,
+# so we need to load our one image in as an array
+input_title = 'axolotl'
+img1 = load_img(f'images/{input_title}.jpg', target_size=(224, 224))
+images = np.asarray([np.array(img1)])
 
-# Load images
-img1 = load_img('images/oscar.jpg', target_size=(224, 224))
-img2 = load_img('images/jeb.jpg', target_size=(224, 224))
-img3 = load_img('images/ball.jpg', target_size=(224, 224))
-images = np.asarray([np.array(img1), np.array(img2), np.array(img3)])
-
-# Preparing input data
+# get the top five predictions from our model
 preprocessed_images = preprocess_input(images)
 image_titles = []
 image_categories = []
 for i in preprocessed_images:
     x = i.reshape((1, i.shape[0], i.shape[1], i.shape[2]))
-    yhat = model.predict(x)
-    label = decode_predictions(yhat)
-    label = label[0][0]
-    prediction_name = label[1].replace('_', ' ')
-    img_title = (f'{prediction_name} ({int(math.ceil(label[2] * 100))}%)')
-    image_titles.append(img_title)
-    image_categories.append(find_cat_in_dict(prediction_name))
+    y = model.predict(x)
+    predictions = decode_predictions(y)
+    predictions = predictions[0]
+    for i in range(len(predictions)):
+        prediction = predictions[i]
+        prediction_name = prediction[1].replace('_', ' ')
+        img_title = (f'{prediction_name} ({int(math.ceil(prediction[2] * 100))}%)')
+        image_titles.append(img_title)
+        image_categories.append(find_cat_in_dict(prediction_name))
+print(image_categories)
 
 
-# In[145]:
+# In[6]:
 
 
 def loss(output):
-    return (output[0][image_categories[0]], output[1][image_categories[1]], output[2][image_categories[2]])
+    return (output[0][image_categories[counter]])
 
 
-# In[146]:
+# In[7]:
 
 
-def model_modifier(m):
-    m.layers[-1].activation = tf.keras.activations.linear
+def modifier(m):
+    m.layers[-1].activation = tf.keras.activations.relu
     return m
 
 
-# In[151]:
+# In[8]:
 
 
 from matplotlib import cm
@@ -106,39 +100,29 @@ from tf_keras_vis.utils import normalize
 
 # Create Gradcam object
 gradcam = Gradcam(model,
-                  model_modifier=model_modifier,
+                  model_modifier=modifier,
                   clone=False)
 
-# Generate heatmap with GradCAM
-"""
-cam = gradcam(loss,
-              preprocessed_images,
-              penultimate_layer=-1, # model.layers number
-             )
-"""
-cam = gradcam(loss,
+
+# In[9]:
+
+
+subplot_args = { 'nrows': 1, 'ncols': 6, 'figsize': (20, 5),
+                 'subplot_kw': {'xticks': [], 'yticks': []} }
+f, ax = plt.subplots(**subplot_args)
+counter = 0
+ax[0].set_title('Original image', fontsize=16)
+ax[0].imshow(images[0])
+for i, title in enumerate(image_titles):
+    cam = gradcam(loss,
               preprocessed_images,
               penultimate_layer=-1,
              )
-cam = normalize(cam)
-
-
-# In[152]:
-
-
-subplot_args = { 'nrows': 1, 'ncols': 3, 'figsize': (9, 3),
-                 'subplot_kw': {'xticks': [], 'yticks': []} }
-f, ax = plt.subplots(**subplot_args)
-for i, title in enumerate(image_titles):
-    ax[i].set_title(title, fontsize=14)
-    ax[i].imshow(images[i])
+    cam = normalize(cam)
+    ax[i+1].set_title(title, fontsize=16)
+    heatmap = np.uint8(cm.jet(cam[0])[..., :3] * 255)
+    ax[i+1].imshow(images[0])
+    ax[i+1].imshow(heatmap, alpha=0.5)
+    counter = counter + 1
 plt.tight_layout()
-plt.show()
-
-f, bx = plt.subplots(**subplot_args)
-for i, title in enumerate(image_titles):
-    heatmap = np.uint8(cm.jet(cam[i])[..., :3] * 255)
-    bx[i].imshow(images[i])
-    bx[i].imshow(heatmap, cmap='jet', alpha=0.4) # overlay
-plt.tight_layout()
-plt.show()
+plt.savefig(f'storage/{input_title}_output.png')
