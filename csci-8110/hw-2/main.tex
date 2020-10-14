@@ -13,6 +13,8 @@
 \newcommand{\courseName}{Advanced Machine Learning Applications}
 \newcommand{\assignmentTitle}{Homework Assignment \#2}
 \newcommand{\assignmentSubtitle}{Explainable Machine Learning}
+\usepackage{geometry}
+\geometry{margin=1in}
 
 \hypersetup{
     colorlinks,
@@ -58,14 +60,85 @@ Several of the key features of this library will be discussed in the \nameref{im
 
 \section{Process \& Results}
 \subsection{Method Selection}
-In approaching this project, the first step was to try and gain more familiarity on the concepts of saliency mapping and class activation maps (CAMs).
+In approaching this project, the first step was to try and gain more familiarity on the concepts of saliency mapping and class activation maps (CAMs, specifically implemented in the course material via Grad-CAM).
 There is a good deal of academic literature around both approaches available on the internet for comparison.
 Ultimately, the decision of which to implement for this project (only one being required) was arbitrary; the CAM approach was chosen primarily because of the more vibrant colors of its output in documentation online.
 While not a terrifically academic method by which to select a project, it was ultimately somewhat of a coin flip to decide what to implement.
 
-\par asdf \cite{Selvaraju2020}
+\par To start, several papers on CAMs were consulted. One in particular, by Selvaraju et al., helped to explain how Grad-CAM works, by  \cite{Selvaraju2020}
 
 \subsection{Implementation} \label{impl}
+\par The Keras Vis library linked in the assignment is not compatible with Tensorflow 2.0, which was used for the previous assignment and this one.
+With that in mind, the \lstinline{tf-keras-vis} library was used from \href{https://github.com/keisen/tf-keras-vis}{GitHub} instead.
+It was similarly straightforward as the Keras Vis documentation, allowing for relatively quick implementation of Grad-CAM for the purpose of visualizing the concept.
+\par To start, an image is loaded from the filesystem, and the top five predictions are obtained from Keras' VGG16 model, as follows:
+
+\begin{lstlisting}[language=Python]
+img1 = load_img('images/goldfish.jpg', target_size=(224, 224))
+images = np.asarray([np.array(img1)])
+for i in preprocessed_images:
+    x = i.reshape((1, i.shape[0], i.shape[1], i.shape[2]))
+    y = model.predict(x)
+\end{lstlisting}
+
+\par Each prediction, and its associated percent loss, is appended to an array for later use. Next, the gradcam object is defined and initialized using a modifier:
+
+\begin{lstlisting}[language=Python]
+def modifier(m):
+    m.layers[-1].activation = tf.keras.activations.relu
+    return m
+
+# Create Gradcam object
+gradcam = Gradcam(model,
+                  model_modifier=modifier,
+                  clone=False)
+\end{lstlisting}
+
+\par Of note: the \lstinline{model_modifier} parameter takes as its input a function from the \lstinline{tf.keras.activations} module.
+Several were tried, here, but did not appear to impact the final output.
+
+\par Each of the top five predictions is provided as a loss function to Grad-CAM function and then mapped onto the image after completion:
+
+\begin{lstlisting}[language=Python]
+for i, title in enumerate(image_titles):
+    cam = gradcam(loss,
+              preprocessed_images,
+              penultimate_layer=-1,
+             )
+    cam = normalize(cam)
+\end{lstlisting}
+
+\par The output of a run of this code, mapped onto an image of Jeb, the cat, is as follows:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6in]{csci-8110/hw-2/images/jeb_output.png}
+    \caption{Jeb, the... wallaby?}
+    \label{fig:jeb}
+\end{figure}
+
+
+\subsection{Model Observations}
+\par Given that the Keras Vis library makes implementing Grad-CAM so straightforward, it was easy to understand, by inputting different images, how the model isolates features to determine what objects an image contains.
+In the case of Jeb, the model does not correctly identify him as a cat.
+For Oscar the dog, the model is \textit{much} more reliable:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6in]{csci-8110/hw-2/images/oscar_output.png}
+    \caption{Oscar, the dog}
+    \label{fig:oscar}
+\end{figure}
+
+\par For stock images, the model is extremely reliable:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6in]{csci-8110/hw-2/images/axolotl_output.png}
+    \caption{An axolotl}
+    \label{fig:axolotl}
+\end{figure}
+
+\par Being able to see the features that each category is "looking" at, with Grad-CAM, is useful for identifying which attributes that each
 
 \section{Conclusions}
 One of the interesting traits of the CAM methods used in this project is that the effectiveness of methods is predicated heavily on a well-trained model.
@@ -75,7 +148,7 @@ The possibility of doing that kind of work later in this course (or in future ac
 
 \par As it stands, though, this project was useful in terms of helping to develop a better understanding of how CNNs can be applied to explain the criteria upon which a trained model perceives input data to be one category (over another).
 Being able to use provided Keras tools to implement this made for a somewhat easy assignment; this was so much the case that it felt somewhat uncomfortable writing only a few lines of code for submission.
-The foundation provided by Assignment \#1 and this assignment should be adequate to move on to more complex topics like training models to data or doing more robust image recognition.
+The foundation provided by Assignment 1 and this assignment should be adequate to move on to more complex topics like training models to data or doing more robust image recognition.
 
 \begin{appendices}
 
