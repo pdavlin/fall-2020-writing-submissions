@@ -1,0 +1,36 @@
+% BEGIN TEMPLATE
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref} 
+\usepackage{xcolor}
+\graphicspath{ {../../images/} }
+\bibliographystyle{acm}
+% CHANGE THESE
+\newcommand{\courseListing}{CSCI 8456-001}
+\newcommand{\courseName}{Introduction to Artificial Intelligence}
+\newcommand{\assignmentTitle}{Knowledge Representation: Answer Set Programming at a Glance}
+\newcommand{\assignmentSubtitle}{Reading on AI \#4}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+\urlstyle{same}
+
+\begin{document}
+  \input{../../templates/titlepage.tex}
+  \graphicspath{{./images/}}
+% END TEMPLATE
+\par The interesting part of this paper, and about answer set programming (ASP) as a whole is the notion of understanding and implementing its specific format of constraint notation and expression.
+Where previous papers discussed, at length, the issue of knowledge representation and the notion of defining ways that computer systems can \textit{have} or \textit{display} the ability to learn, ASP approaches provide computer systems with ways to create better models of the world.
+In turn, these models can be used to supply systems with better data in order to make decisions.
+
+\par The paper's description of ASP semantics is of particular interest in the ways that it aligns with humans' natural understanding of logic and problem constraints.
+In much the same way that a person might think of logical statements--"if someone is highly educated, they are likely to be employed"--ASP semantics provide developers with a means to express constraints concisely and clearly.
+The programs, then, also solve for constraint inputs much in the way that a human being might, save for the increased speed.
+The value of this, then, is in being able to enhance and improve the process by which constraint evaluation is performed, allowing for individuals (and computers!) to quickly evaluate the feasibility of a solution against some particular iteration of actions or constraints being taken.
+Being able to approach the CSP problems described earlier in the lecture is tremendously valuable, since from an integration perspective, it would allow AI programs or models to more effectively create an accurate state space to complete desired goals.
+
+\end{document}

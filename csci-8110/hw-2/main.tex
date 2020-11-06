@@ -54,6 +54,7 @@
 \section{Project Setup}
 \par Similar to the prior assignment, all work in this project was developed and executed using the Paperspace Gradient service.
 Gradient allows for rapid setup of TensorFlow notebooks on GPU-powered machines.
+A static version of the notebook can be accessed by clicking on \href{https://console.paperspace.com/te7vzjiu3/notebook/pr4zcy28o}{this link}.
 \par Moreover, per the provided instructions, the Keras Vis library was used to simplify the process of implementing the concepts discussed in class.
 There are many effective libraries built on top of the Keras toolset for this kind of application, allowing for very direct implementation and understanding of the processes used to visualize model outputs.
 Several of the key features of this library will be discussed in the \nameref{impl} section.
@@ -65,7 +66,8 @@ There is a good deal of academic literature around both approaches available on 
 Ultimately, the decision of which to implement for this project (only one being required) was arbitrary; the CAM approach was chosen primarily because of the more vibrant colors of its output in documentation online.
 While not a terrifically academic method by which to select a project, it was ultimately somewhat of a coin flip to decide what to implement.
 
-\par To start, several papers on CAMs were consulted. One in particular, by Selvaraju et al., helped to explain how Grad-CAM works, by  \cite{Selvaraju2020}
+\par To start, a few papers on CAMs were consulted. One in particular, by Selvaraju et al., helped to explain how Grad-CAM works, by finding gradients that associate features in some given image with their importance to a pre-selected target class \cite{Selvaraju2020}.
+The final gradient can then be laid over the original image to \textit{explain} how the model arrived at its conclusion.
 
 \subsection{Implementation} \label{impl}
 \par The Keras Vis library linked in the assignment is not compatible with Tensorflow 2.0, which was used for the previous assignment and this one.
@@ -138,10 +140,15 @@ For Oscar the dog, the model is \textit{much} more reliable:
     \label{fig:axolotl}
 \end{figure}
 
-\par Being able to see the features that each category is "looking" at, with Grad-CAM, is useful for identifying which attributes that each
+\par With the Grad-CAM heatmaps, being able to see the features that each category is "looking" at, is useful for identifying which attributes that the VGG16 model is using to identify an image, given a category.
+This is even useful in situations, like with Jeb, where the model has room for refinement.
+
+\par Ideally, the \lstinline{tf-keras-vis} library would have more room for experimentation, or this assignment would have been started with more time to fully implement a Grad-CAM implementation.
+In either case, more could be done to visualize the impact of selected layers on the final heatmap.
+All said, though, being able to understand the process that models use to identify images is a useful exercise.
 
 \section{Conclusions}
-One of the interesting traits of the CAM methods used in this project is that the effectiveness of methods is predicated heavily on a well-trained model.
+One of the interesting traits of the CAM methods used in this project is that, as a visualization tool, the effectiveness of methods is predicated heavily on a well-trained model.
 In practice, this meant that stock images of, say, a goldfish were easily recognizable by the model, where personal photos of a cat were misinterpreted.
 Since the results of CAM mapping are tied so closely to that model, and since the process of training models currently feels somewhat out of view, it bears noting that an area of interest for future work might be around training and implementing more training for datasets. It was difficult to resist the urge to try and implement a more robust model for, say, a family member's pet. 
 The possibility of doing that kind of work later in this course (or in future academic work) is attractive in that it would provide further opportunities to build an understanding of how neural networks can be supplied with better information on which to make inferences about data.
@@ -154,7 +161,24 @@ The foundation provided by Assignment 1 and this assignment should be adequate t
 
 \newpage
 \section{Model Output Listing} \label{modelouts}
-TODO
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6in]{csci-8110/hw-2/images/bear_output.png}
+    \caption{A polar bear}
+    \label{fig:bear}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6in]{csci-8110/hw-2/images/bullet_train_output.png}
+    \caption{A bullet train}
+    \label{fig:train}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6in]{csci-8110/hw-2/images/waffle_iron_output.png}
+    \caption{A waffle iron}
+    \label{fig:waffle}
+\end{figure}
 \newpage
 \section{Complete Code Listing} \label{codelist}
 \lstinputlisting[language=Python]{HW2_code.py}
