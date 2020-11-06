@@ -65,7 +65,6 @@ Given a choice between three types
 Ultimately, the decision of which to implement for this project (only one being required) was arbitrary; the SENet approach was chosen for no reason in particular.
 While not a terrifically academic method by which to select a project, it was ultimately somewhat of a coin flip to decide what to implement.
 
-\par To start, a few papers on SENet were consulted. \textbf{[TODO: Complete this section]}
 \subsection{Implementation} \label{impl}
 \par The first task in implementing this assignment involved determining how best to implement the SENet block as defined in the original paper by Hu, et al \cite{Hu2020Squeeze-and-ExcitationNetworks}.
 That model can be found in the figure below:
@@ -286,8 +285,8 @@ The impact of the SENet block appears to be visible in these images--the block a
 This is observable in figures \ref{fig:golf_1_pre} and \ref{fig:golf_1_post}, above, where more details are visible in the pre-SENet feature maps than the post-SENet feature maps.
 It follows, then, that the SENet block does indeed direct attention toward the more relevant parts of the image, aiding the model generally.
 
-\par Also of note in the feature maps is that the SENet block appears to be more consequential placed earlier in the VGG16 model than later.
-This can be seen in the images listed in \nameref{modelouts}--there are more differences in the comparisons when SENet is placed after block 1 than in the comparisons when SENet is placed after block 5.
+\par Also of note in the feature maps is that the SENet block appears to be more consequential placed in the middle of the VGG16 model, rather than earlier or later.
+This can be seen in the images listed in \nameref{modelouts}--there are more differences in the comparisons when SENet is placed after block 3 than in the comparisons when SENet is placed after block 1 or 5.
 
 \section{Conclusions}
 \par This was a difficult--but rewarding--assignment. Going in, it wasn't expected that so much of this assignment would hinge upon properly understanding and implementing model predictions.
@@ -310,53 +309,53 @@ The concepts of training models for data is still much hazier than the process o
 \section{Model Output Listing} \label{modelouts}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=6in]{csci-8110/hw-3/images/golf-pre-SENet-block2_pool-2020-11-05 18_25_06.663590_output.png}
+    \includegraphics[width=3in]{csci-8110/hw-3/images/golf-pre-SENet-block2_pool-2020-11-05 18_25_06.663590_output.png}
     \caption{Golf ball feature map after \lstinline{block2_pool}, before SENet}
     \label{fig:golf_2_pre}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=6in]{csci-8110/hw-3/images/golf-post-SENet-block2_pool-2020-11-05 18_25_10.151699_output.png}
+    \includegraphics[width=3in]{csci-8110/hw-3/images/golf-post-SENet-block2_pool-2020-11-05 18_25_10.151699_output.png}
     \caption{Golf ball feature map before \lstinline{block3_conv1}, after SENet}
     \label{fig:golf_2_post}
 \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=6in]{csci-8110/hw-3/images/golf-pre-SENet-block3_pool-2020-11-05 18_29_43.542902_output.png}
+    \includegraphics[width=3in]{csci-8110/hw-3/images/golf-pre-SENet-block3_pool-2020-11-05 18_29_43.542902_output.png}
     \caption{Golf ball feature map after \lstinline{block3_pool}, before SENet}
     \label{fig:golf_3_pre}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=6in]{csci-8110/hw-3/images/golf-post-SENet-block3_pool-2020-11-05 18_29_46.031795_output.png}
+    \includegraphics[width=3in]{csci-8110/hw-3/images/golf-post-SENet-block3_pool-2020-11-05 18_29_46.031795_output.png}
     \caption{Golf ball feature map before \lstinline{block4_conv1}, after SENet}
     \label{fig:golf_3_post}
 \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=6in]{csci-8110/hw-3/images/golf-pre-SENet-block4_pool-2020-11-05 18_35_31.491006_output.png}
+    \includegraphics[width=3in]{csci-8110/hw-3/images/golf-pre-SENet-block4_pool-2020-11-05 18_35_31.491006_output.png}
     \caption{Golf ball feature map after \lstinline{block4_pool}, before SENet}
     \label{fig:golf_4_pre}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=6in]{csci-8110/hw-3/images/golf-post-SENet-block4_pool-2020-11-05 18_35_33.867099_output.png}
+    \includegraphics[width=3in]{csci-8110/hw-3/images/golf-post-SENet-block4_pool-2020-11-05 18_35_33.867099_output.png}
     \caption{Golf ball feature map before \lstinline{block5_conv1}, after SENet}
     \label{fig:golf_4_post}
 \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=6in]{csci-8110/hw-3/images/golf-pre-SENet-block5_pool-2020-11-05 18_44_09.014537_output.png}
+    \includegraphics[width=3in]{csci-8110/hw-3/images/golf-pre-SENet-block5_pool-2020-11-05 18_44_09.014537_output.png}
     \caption{Golf ball feature map after \lstinline{block5_pool}, before SENet}
     \label{fig:golf_5_pre}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=6in]{csci-8110/hw-3/images/golf-post-SENet-block5_pool-2020-11-05 18_44_11.709641_output.png}
+    \includegraphics[width=3in]{csci-8110/hw-3/images/golf-post-SENet-block5_pool-2020-11-05 18_44_11.709641_output.png}
     \caption{Golf ball feature map before \lstinline{flatten}, after SENet}
     \label{fig:golf_5_post}
 \end{figure}
