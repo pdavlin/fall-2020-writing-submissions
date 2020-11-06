@@ -1,0 +1,31 @@
+% BEGIN TEMPLATE
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref} 
+\usepackage{xcolor}
+\graphicspath{ {../../images/} }
+\bibliographystyle{acm}
+% CHANGE THESE
+\newcommand{\courseListing}{CSCI 8456-001}
+\newcommand{\courseName}{Introduction to Artificial Intelligence}
+\newcommand{\assignmentTitle}{Achievements in Answer Set Programming}
+\newcommand{\assignmentSubtitle}{Reading on AI \#5}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+\urlstyle{same}
+
+\begin{document}
+  \input{../../templates/titlepage.tex}
+  \graphicspath{{./images/}}
+% END TEMPLATE
+\par This paper describes a method of expressing, documenting, and tracking expected outputs of rules in an Answer Set Programming (ASP) program using a specifically hierarchy of comments inside ASP code.
+Commenting code is important in any language, but is always most valuable when applied consistently, so anyone reading the program can more quickly understand the purpose of important lines in the program.
+For ASP, this approach is especially interesting given that it allows newcomers to the language--really, to the whole paradigm of programming this way--to more quickly understand how a given ASP program should behave, by translating the achievements of individual rules into understandable, easily-digestible explanations.
+More languages should have well-defined, codified commenting methods like the achievement method laid out in this paper.
+
+\end{document}
