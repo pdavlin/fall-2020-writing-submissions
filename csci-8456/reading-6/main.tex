@@ -1,0 +1,37 @@
+% BEGIN TEMPLATE
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{hyperref} 
+\usepackage{xcolor}
+\graphicspath{ {../../images/} }
+\bibliographystyle{acm}
+% CHANGE THESE
+\newcommand{\courseListing}{CSCI 8456-001}
+\newcommand{\courseName}{Introduction to Artificial Intelligence}
+\newcommand{\assignmentTitle}{Facebook bAbi}
+\newcommand{\assignmentSubtitle}{Reading on AI \#6}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+\urlstyle{same}
+
+\begin{document}
+  \input{../../templates/titlepage.tex}
+  \graphicspath{{./images/}}
+% END TEMPLATE
+\par Much in the vein of other readings for the course, this paper discusses an approach for evaluating intelligence--this time, in the field of natural language-based dialogue agents.
+The approach in question covers a list of twenty tasks that can help to evaluate how a language-based agent manages and tracks information across a series of simple statements.
+The tasks increase in complexity throughout, starting with straightforward questions about specific words in the input statements and escalating to pathfinding and assessment of motivation.
+The testing framework provides a basis by which a tested agent can be evaluated and scored in any of the twenty areas.
+
+\par With this final reading assignment, the common theme across the entire course reading materials becomes more clear.
+A critical component of developing in any aspect of the AI field is defining specific, actionable problem spaces in which a solution can be evaluated.
+Coming into a course like this with no background knowledge of the variety of AI concepts, it is easy to visualize the desired outcome of any AI project being a general-purpose, Skynet-style artificial intelligence.
+The reality is much more nuanced--AI is, as a field, about applying the concepts outlined throughout the course in specific problem domains to maximize their efficacy.
+Each of the papers this semester has, in some way or another, expressed some way that these problem spaces can be more effectively defined, and has imparted (at least upon me) the notion that well-defined problems are as important as well-executed solutions.
+
+\end{document}
