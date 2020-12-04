@@ -89,28 +89,91 @@ With the models defined, a full generative adversarial network (GAN) could be co
 
 \subsection{Implementation} \label{impl}
 \par The first step toward this assignment involved implementing the two models defined in the assignment description. 
-The code for these, being more or less a completely by-the-numbers implementation of explicitly defined layers, was easy to write and is included in the \nameref{codelist} section.
+The code for these, being more or less a completely by-the-numbers implementation of explicitly defined layers, was trivial to write and is included in the \nameref{codelist} section.
 Combining the models together was a straightforward process as well, adding both independent models to a new "parent" model:
 
 \begin{lstlisting}[language=Python]
-def gan_impl(generator, discriminator):
-	# make weights in the discriminator not trainable
-	discriminator.trainable = False
-	# connect them
-	model = Sequential()
-	# add generator
-	model.add(generator)
-	# add the discriminator
-	model.add(discriminator)
-	# compile model
-	opt = Adam(lr=0.0002, beta_1=0.5)
-	model.compile(loss='binary_crossentropy', optimizer=opt)
-	return model
+print('defining discriminator')
+discriminator = discriminator_impl()
+discriminator.trainable = False
+print('defining generator')
+generator = generator_impl()
+print('defining gan')
+gan = Sequential()
+gan.add(generator)
+gan.add(discriminator)
+opt = Adam(lr=0.0002, beta_1=0.5)
+gan.compile(loss='binary_crossentropy', optimizer=opt)
 \end{lstlisting}
 
 \par Note that the discriminator model was set such that \lstinline{trainable = False}.
 
-\par Of more consequence was the process of supplying data to the complete model, training it, and plotting the results.
+\par Of more consequence was the process of supplying data to the complete model, training it, and plotting the results. 
+For purposes of this assignment, 600 epochs were run, each with a fairly standard batch size of 256.
+In each iteration, images need to be randomly selected from the provided MNIST data.
+Keras makes loading that data fairly straightforward with the \lstinline{load_data()} function:
+
+\begin{lstlisting}[language=Python]
+def load_images():
+	# load mnist dataset
+	(train_data, _), (_, _) = load_data()
+	X = expand_dims(train_data, axis=-1)
+	X = X.astype('float32')
+	X = X / 255.0
+	return X
+\end{lstlisting}
+
+\par On top of random selection, the data needed to be marked as "real data" with an array of ones:
+
+\begin{lstlisting}[language=Python]
+# select real samples
+def get_real_data(dataset, num_samples):
+	random_selector = randint(0, dataset.shape[0], num_samples)
+	x = dataset[random_selector]
+	# label as real
+	y = ones((num_samples, 1))
+	return x, y
+\end{lstlisting}
+
+\par Next, "fake" images were generated and marked with zeros using the generator model defined in the assignment guidelines:
+
+\begin{lstlisting}[language=Python]
+# use the generator to generate fresh images
+def get_fake_data(generator, dim_value, num_samples):
+	x_input = randn(dim_value * num_samples)
+	x_input = x_input.reshape(num_samples, dim_value)
+	# based on random input, generate images from noise
+	x = generator.predict(x_input)
+	# label as fake samples
+	y = zeros((num_samples, 1))
+	return x, y
+\end{lstlisting}
+
+\par In each epoch's batch, half of the data was real, and half was fake, and the discriminator was trained on the supplied data:
+
+\begin{lstlisting}[language=Python]
+# pick random images from MNIST dataset
+x_real, y_real = get_real_data(dataset, 128)
+# generate fake images
+x_fake, y_fake = get_fake_data(generator, dim_value, 128)
+# combine two sets of images into one set of size 256
+x, y = vstack((x_real, x_fake)), vstack((y_real, y_fake))
+discriminator_loss, _ = discriminator.train_on_batch(x, y)
+\end{lstlisting}
+
+\par Finally, one more set of random points was generated and marked as "real" for input to the full GAN model:
+
+\begin{lstlisting}[language=Python]
+# set up random points in latent space for generator input
+x_input = randn(dim_value * batch_size)
+x_input = x_input.reshape(batch_size, dim_value)
+# label samples as real, for testing
+y_input = ones((batch_size, 1))
+# get gan loss
+gan_loss = gan.train_on_batch(x_input, y_input)
+\end{lstlisting}
+
+\par With the model trainable, training can begin, and outputs can be measured.
 
 \subsection{Model Observations} \label{model_obvs}
 \par Using the plots generated in the code, it's possible to draw some interesting conclusions about the GAN model implemented for this assignment.
@@ -177,7 +240,7 @@ The takeaways from this assignment--and the course as a whole--provide tremendou
 \begin{appendices}
 \newpage
 \section{Complete Code Listing} \label{codelist}
-% \lstinputlisting[language=Python]{8110_hw3.py}
+\lstinputlisting[language=Python]{8110_hw4.py}
 \newpage
 \section{Stabilization Graph} \label{graph_app}
 \begin{figure}[H]
@@ -301,13 +364,6 @@ The takeaways from this assignment--and the course as a whole--provide tremendou
 \caption{Outputs after 550th epoch (left) and 600th epoch (right)}
 \label{fig:ep20-100}
 \end{figure}
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=3in]{csci-8110/hw-3/images/golf-post-SENet-block5_pool-2020-11-05 18_44_11.709641_output.png}
-%     \caption{Golf ball feature map before \lstinline{flatten}, after SENet}
-%     \label{fig:golf_5_post}
-% \end{figure}
 
 \end{appendices}
 
